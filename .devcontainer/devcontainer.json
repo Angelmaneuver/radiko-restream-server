@@ -1,0 +1,59 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/python
+{
+	"name": "Python 3",
+	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+	"build": {
+		"dockerfile": "Dockerfile",
+		// Update 'VARIANT' to pick a Python version: 3, 3.14, 3.13, 3.12, 3.11, 3.10, 3.9, 3.8, 3.7
+		"args": { "VARIANT": "3.14" }
+	},
+
+	// Features to add to the dev container. More info: https://containers.dev/features.
+	// "features": {},
+
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// "forwardPorts": [],
+
+	// Use 'postCreateCommand' to run commands after the container is created.
+	// "postCreateCommand": "pip3 install --user -r requirements.txt",
+
+	// Configure tool-specific properties.
+	// "customizations": {},
+	"customizations": {
+		"vscode": {
+			"settings": {
+				"editor.insertSpaces": true,
+				"editor.detectIndentation": true,
+				"files.insertFinalNewline": true,
+				"files.trimFinalNewlines": true,
+				"[python]": {
+					"editor.tabSize": 4,
+					"editor.indentSize": "tabSize",
+					"editor.defaultFormatter": "charliermarsh.ruff",
+					"editor.formatOnSave": true,
+					"editor.codeActionsOnSave": {
+						"source.fixAll": "explicit",
+			            "source.organizeImports": "explicit"
+					},
+					"ruff.format.preview": false,
+					"ruff.lint.select": ["ALL"],
+					"ruff.lint.extendSelect": ["ALL"]
+				},
+				"trailing-spaces.trimOnSave": true,
+				"python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
+				"python.analysis.typeCheckingMode": "strict"
+			},
+			"extensions": [
+				"shardulm94.trailing-spaces",
+				"christian-kohler.path-intellisense",
+				"ms-python.python",
+				"charliermarsh.ruff",
+				"njpwerner.autodocstr"
+			]
+		}
+	}
+
+	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+	// "remoteUser": "root"
+}

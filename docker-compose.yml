@@ -1,0 +1,6 @@
+services:
+  radiko_restream_server:
+    build:
+      context: .
+    container_name: radiko_restream_server
+    restart: always

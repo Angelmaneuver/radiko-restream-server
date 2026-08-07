@@ -1,0 +1,20 @@
+{
+	"folders": [
+		{
+			"name": "Radiko Restream Server",
+			"path": "."
+		}
+	],
+	"launch": {
+		"version": "0.2.0",
+		"configurations": [
+			{
+				"name": "Python Debugger: Receiverd",
+				"type": "debugpy",
+				"request": "launch",
+				"program": "${workspaceFolder}/src/radiko_restream_server/app.py",
+				"args": ["-d"]
+			}
+		]
+	}
+}
