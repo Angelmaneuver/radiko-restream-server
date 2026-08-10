@@ -27,16 +27,27 @@ def radiko() -> Response:
             400,
             EXCEPTION_MESSAGE.format("Invalid parameter", "Require sid."),
         )
-    else:
-        option["sid"] = args["sid"]
 
+    option["sid"] = args["sid"]
     option["stream"] = args.get("stream", "best")
 
     streams = Streamlink().streams("https://radiko.jp/#!/live/{}".format(option["sid"]))
 
+    if streams is None or option["stream"] not in streams:
+        abort(
+            404,
+            EXCEPTION_MESSAGE.format("Stream not found", option["stream"]),
+        )
+
     return Response(
         response=__streaming(streams[option["stream"]].open()),
-        mimetype="audio/mpeg" if isDebug() else None,
+        mimetype="audio/mpeg",
+        headers={
+            "Cache-Control": "no-cache",
+            "Pragma": "no-cache",
+            "Expires": "0",
+        },
+        direct_passthrough=True,
     )
 
 
