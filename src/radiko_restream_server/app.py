@@ -11,7 +11,7 @@ app = Flask(__name__)
 HOST = "0.0.0.0"
 PORT = 8888
 
-BUFF_SIZE = 4096
+BUFF_SIZE = 1024
 PAUSE = 600
 
 EXCEPTION_MESSAGE = "Exception {0}: {1}\n"
