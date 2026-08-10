@@ -11,7 +11,7 @@ app = Flask(__name__)
 HOST = "0.0.0.0"
 PORT = 8888
 
-BUFF_SIZE = 1 << 16
+BUFF_SIZE = 4096
 PAUSE = 600
 
 EXCEPTION_MESSAGE = "Exception {0}: {1}\n"
@@ -65,6 +65,9 @@ def __streaming(fd: StreamIO):
     with fd:
         while chunk:
             chunk = fd.read(BUFF_SIZE)
+
+            if not chunk:
+                break
 
             yield chunk
 
