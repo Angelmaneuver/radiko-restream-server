@@ -24,7 +24,7 @@ class RadikoRouteTest(unittest.TestCase):
             response = self.client.get("/radiko?sid=test", buffered=True)
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.content_type, "audio/mpeg")
+        self.assertEqual(response.content_type, "audio/aac")
         self.assertEqual(response.headers.get("Cache-Control"), "no-cache")
 
 

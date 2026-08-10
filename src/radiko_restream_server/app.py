@@ -2,7 +2,7 @@
 
 import argparse
 
-from flask import Flask, Response, abort, request
+from flask import Flask, Response, abort, request, stream_with_context
 from streamlink.session.session import Streamlink
 from streamlink.stream.stream import StreamIO
 
@@ -40,8 +40,8 @@ def radiko() -> Response:
         )
 
     return Response(
-        response=__streaming(streams[option["stream"]].open()),
-        mimetype="audio/mpeg",
+        response=stream_with_context(__streaming(streams[option["stream"]].open())),
+        mimetype="audio/aac",
         headers={
             "Cache-Control": "no-cache",
             "Pragma": "no-cache",
