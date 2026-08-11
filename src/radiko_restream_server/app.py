@@ -42,11 +42,7 @@ def radiko() -> Response:
     return Response(
         response=stream_with_context(__streaming(streams[option["stream"]].open())),
         mimetype="audio/aac",
-        headers={
-            "Cache-Control": "no-cache",
-            "Pragma": "no-cache",
-            "Expires": "0",
-        },
+        headers={"X-Accel-Buffering": "no", "Icy-MetaData": "0"},
         direct_passthrough=True,
     )
 
