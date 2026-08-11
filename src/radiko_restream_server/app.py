@@ -5,6 +5,7 @@ import argparse
 from flask import Flask, Response, abort, request, stream_with_context
 from streamlink.session.session import Streamlink
 from streamlink.stream.stream import StreamIO
+from werkzeug.exceptions import BadRequest, NotFound
 
 app = Flask(__name__)
 
@@ -17,7 +18,7 @@ PAUSE = 600
 EXCEPTION_MESSAGE = "Exception {0}: {1}\n"
 
 
-@app.route("/radiko", methods=["GET"])
+@app.route("/radiko.aac", methods=["GET"])
 def radiko() -> Response:
     args = request.args.to_dict()
     option = {}
@@ -42,16 +43,31 @@ def radiko() -> Response:
     return Response(
         response=stream_with_context(__streaming(streams[option["stream"]].open())),
         mimetype="audio/aac",
-        headers={"X-Accel-Buffering": "no", "Icy-MetaData": "0"},
+        headers={
+            "X-Accel-Buffering": "no",
+            "Icy-MetaData": "0",
+            "Cache-Control": "no-cache",
+            "Pragma": "no-cache",
+            "Expires": "0",
+        },
         direct_passthrough=True,
     )
 
 
 @app.errorhandler(Exception)
 def error(error):
-    abort(
-        500,
+    if isinstance(error, (NotFound, BadRequest)):
+        response = app.response_class(
+            EXCEPTION_MESSAGE.format(type(error).__name__, error),
+            status=error.code,
+            mimetype="text/plain",
+        )
+        return response
+
+    return app.response_class(
         EXCEPTION_MESSAGE.format(type(error).__name__, error),
+        status=500,
+        mimetype="text/plain",
     )
 
 

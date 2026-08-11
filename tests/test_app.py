@@ -21,7 +21,7 @@ class RadikoRouteTest(unittest.TestCase):
             mock_streamlink_instance.streams.return_value = {"best": mock_stream}
             mock_streamlink_cls.return_value = mock_streamlink_instance
 
-            response = self.client.get("/radiko?sid=test", buffered=True)
+            response = self.client.get("/radiko.aac?sid=test", buffered=True)
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, "audio/aac")
