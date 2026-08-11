@@ -12,7 +12,7 @@ app = Flask(__name__)
 HOST = "0.0.0.0"
 PORT = 8888
 
-BUFF_SIZE = 1880
+BUFF_SIZE = 512
 PAUSE = 600
 
 EXCEPTION_MESSAGE = "Exception {0}: {1}\n"
@@ -42,7 +42,7 @@ def radiko() -> Response:
 
     return Response(
         response=stream_with_context(__streaming(streams[option["stream"]].open())),
-        mimetype="audio/aac",
+        mimetype="audio/x-aac",
         headers={
             "X-Accel-Buffering": "no",
             "Icy-MetaData": "0",
