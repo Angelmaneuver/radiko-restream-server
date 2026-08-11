@@ -46,9 +46,8 @@ def radiko() -> Response:
         headers={
             "X-Accel-Buffering": "no",
             "Icy-MetaData": "0",
-            "Cache-Control": "no-cache",
-            "Pragma": "no-cache",
-            "Expires": "0",
+            "Cache-Control": "no-cache, no-store, must-revalidate",
+            "Connection": "keep-alive",
         },
         direct_passthrough=True,
     )
@@ -97,7 +96,12 @@ def main() -> None:
 
     args = parser.parse_args()
 
-    app.run(debug=args.d, host=HOST, port=args.p if args.p is not None else PORT)
+    app.run(
+        debug=args.d,
+        host=HOST,
+        port=args.p if args.p is not None else PORT,
+        threaded=True,
+    )
 
 
 if "__main__" == __name__:
