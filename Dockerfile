@@ -29,4 +29,4 @@ RUN     pip install --upgrade pip            \
         && pip install -r requirements.txt   \
         && pip cache purge
 
-CMD     ["python3", "-m", "radiko_restream_server"]
+CMD     ["gunicorn", "--workers", "1", "--threads", "4", "--worker-class", "gthread", "-b", "0.0.0.0:5000", "app:app"]
