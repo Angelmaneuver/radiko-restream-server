@@ -9,4 +9,5 @@ You can easily set it up using Docker.
 ## Third party libraries used
 
  - [Streamlink](https://github.com/streamlink/streamlink)
+ - [FFmpeg](https://github.com/FFmpeg/FFmpeg)
  - [Flask](https://github.com/pallets/flask)
