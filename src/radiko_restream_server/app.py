@@ -66,9 +66,9 @@ def start(station_id: str) -> bool:
             PLAYLIST_PATH,
             c="copy",
             f="hls",
-            hls_time=2,
+            hls_time=4,
             hls_list_size=5,
-            hls_flags="delete_segments",
+            hls_flags="delete_segments+temp_file",
         )
 
         ffmpeg_args = ffmpeg.compile(stream_output)
