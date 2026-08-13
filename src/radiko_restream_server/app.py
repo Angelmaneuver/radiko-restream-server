@@ -30,6 +30,10 @@ PLAYLIST_PATH = os.path.join(HLS_DIR, PLAYLIST_NAME)
 
 TIMEOUT_SECONDS = 15
 
+FFMPEG_ARGS = {"c": "copy"}
+FFMPEG_ARGS_FOR_RADIKO = {"c:a": "aac", "b:a": "128k", "ar": "44100", "ac": "1"}
+
+
 EXCEPTION_MESSAGE = "Exception {0}: {1}\n"
 
 active_ffmpeg_process = None
@@ -64,7 +68,7 @@ def start(station_id: str) -> bool:
         stream_output = ffmpeg.output(
             stream_input,
             PLAYLIST_PATH,
-            **{"c:a": "aac", "b:a": "64", "ar": "44100", "ac": "1"},
+            **FFMPEG_ARGS_FOR_RADIKO,
             f="hls",
             hls_time=4,
             hls_list_size=5,
