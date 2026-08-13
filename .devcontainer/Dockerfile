@@ -4,6 +4,7 @@ FROM mcr.microsoft.com/devcontainers/python:${VARIANT}
 
 RUN  apt-get update && apt-get install -y \
        curl                               \
+       ffmpeg                             \
      && apt-get clean                     \
      && rm -rf /var/lib/apt/lists/*
 

@@ -13,7 +13,7 @@ ARG     FTP_PROXY
 WORKDIR /app
 
 RUN     apt-get update && apt-get install -y \
-          sudo                               \
+          ffmpeg                             \
         && apt-get clean                     \
         && rm -rf /var/lib/apt/lists/*
 

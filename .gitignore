@@ -9,5 +9,8 @@ wheels/
 # Virtual environments
 .venv
 
+# ts files
+hls/
+
 # OS manage file
 .DS_Store
