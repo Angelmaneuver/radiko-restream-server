@@ -64,7 +64,7 @@ def start(station_id: str) -> bool:
         stream_output = ffmpeg.output(
             stream_input,
             PLAYLIST_PATH,
-            c="copy",
+            **{"c:a": "aac", "b:a": "64", "ar": "44100", "ac": "1"},
             f="hls",
             hls_time=4,
             hls_list_size=5,
