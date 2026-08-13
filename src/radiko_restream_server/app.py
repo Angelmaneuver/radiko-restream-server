@@ -50,6 +50,7 @@ EXCEPTION_MESSAGE = "Exception {0}: {1}\n"
 
 active_ffmpeg_process = None
 active_stream_fd = None
+active_station_id = None
 last_access_time = 0.0
 monitor_thread_running = False
 bridge_thread_running = False
@@ -60,6 +61,7 @@ def start(station_id: str) -> bool:
     global \
         active_ffmpeg_process, \
         active_stream_fd, \
+        active_station_id, \
         last_access_time, \
         monitor_thread_running, \
         bridge_thread_running
@@ -73,10 +75,12 @@ def start(station_id: str) -> bool:
 
         if not streams or "best" not in streams:
             logger.warning(f"{station_id} is not found")
+            active_station_id = None
             return False
 
         stream = streams["best"]
         active_stream_fd = stream.open()
+        active_station_id = station_id
 
         stream_input = ffmpeg.input("pipe:0")
         stream_output = ffmpeg.output(
@@ -126,17 +130,23 @@ def start(station_id: str) -> bool:
 
     except OSError as e:
         logger.error(f"File/Stream operation error: {e}")
+        active_station_id = None
         stop()
         return False
 
     except subprocess.SubprocessError as e:
         logger.error(f"Process error: {e}")
+        active_station_id = None
         stop()
         return False
 
 
 def stop() -> None:
-    global active_ffmpeg_process, active_stream_fd, bridge_thread_running
+    global \
+        active_ffmpeg_process, \
+        active_stream_fd, \
+        active_station_id, \
+        bridge_thread_running
 
     logger.info("Stopping HTTP Live Streaming")
 
@@ -175,6 +185,8 @@ def stop() -> None:
                 logger.error(f"Streamlink stream close error: {e}")
 
             active_stream_fd = None
+
+        active_station_id = None
 
         if os.path.exists(HLS_DIR):
             shutil.rmtree(HLS_DIR)
@@ -259,6 +271,12 @@ def update_access_time() -> None:
 @app.route("/stream/<station_id>/live.m3u8")
 def serve_m3u8(station_id: str) -> Response:
     update_access_time()
+
+    if active_station_id is not None and active_station_id != station_id:
+        logger.info(
+            f"Requested station changed from {active_station_id} to {station_id}."
+        )
+        stop()
 
     if active_ffmpeg_process is None or active_ffmpeg_process.poll() is not None:
         success = start(station_id)
